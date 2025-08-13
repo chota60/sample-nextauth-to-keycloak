@@ -10,9 +10,32 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id_token?: string;
     provider?: string;
+    issuer?: string;
   }
 }
 
+// セッションの型定義を拡張
+declare module 'next-auth' {
+  interface Session {
+    token: JWT;
+    issuer?: string;
+  }
+}
+
+// JWTトークンをデコードする関数
+function decodeJWT(token: string) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error('Failed to decode JWT:', error);
+    return null;
+  }
+}
 
 // All requests to /api/auth/* (signIn, callback, signOut, etc.) will automatically be handled by NextAuth.js.
 export const authOptions = {
@@ -28,6 +51,13 @@ export const authOptions = {
       if (account) {
         token.id_token = account.id_token
         token.provider = account.provider
+        // id_tokenからissuer情報を取得
+        if (account.id_token) {
+          const decodedToken = decodeJWT(account.id_token);
+          if (decodedToken && decodedToken.iss) {
+            token.issuer = decodedToken.iss;
+          }
+        }
       }
       return token
     },
@@ -36,6 +66,8 @@ export const authOptions = {
         session.user.id = token.sub;
       }
       session.token = token
+      // issuer情報をセッションに追加
+      session.issuer = token.issuer
       return session
     },
   },

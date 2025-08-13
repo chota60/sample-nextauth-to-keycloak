@@ -73,6 +73,10 @@ export default function Component() {
                   <span className={styles.tokenLabel}>session_id:</span>
                   <span className={styles.tokenValue}>{session.user.id || 'N/A'}</span>
                 </div>
+                <div className={styles.tokenRow}>
+                  <span className={styles.tokenLabel}>issuer:</span>
+                  <span className={styles.tokenValue}>{session.issuer || 'N/A'}</span>
+                </div>
               </div>
             </div>
           </div>
