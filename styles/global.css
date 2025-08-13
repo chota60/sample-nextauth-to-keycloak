@@ -15,6 +15,9 @@ body {
     Droid Sans,
     Helvetica Neue,
     sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -29,4 +32,35 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8f9fa;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6c757d;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(108, 117, 125, 0.2);
+  color: #212529;
+}
+
+/* Focus outline for accessibility */
+button:focus,
+input:focus {
+  outline: 2px solid #495057;
+  outline-offset: 2px;
 }
