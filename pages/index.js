@@ -5,8 +5,6 @@ export default function Component() {
   const { data: session } = useSession();
   
   if (session) {
-    console.log(session.user)
-    console.log(session.token)
     return (
       <div className={styles.container}>
         <div className={styles.welcomeCard}>
@@ -57,7 +55,15 @@ export default function Component() {
                 </div>
                 <div className={styles.tokenRow}>
                   <span className={styles.tokenLabel}>expires_in:</span>
-                  <span className={styles.tokenValue}>{session.expires ? `${Math.floor((new Date(session.expires) - new Date()) / 1000)}s` : 'N/A'}</span>
+                  <span className={styles.tokenValue}>
+                    {session.expires ? `${Math.floor((new Date(session.expires) - new Date()) / 1000)}s` : 'N/A'}
+                  </span>
+                </div>
+                <div className={styles.tokenRow}>
+                  <span className={styles.tokenLabel}>audience:</span>
+                  <span className={styles.tokenValue}>
+                    {session.token.aud || 'N/A'}
+                  </span>
                 </div>
               </div>
             </div>
@@ -76,6 +82,22 @@ export default function Component() {
                 <div className={styles.tokenRow}>
                   <span className={styles.tokenLabel}>issuer:</span>
                   <span className={styles.tokenValue}>{session.issuer || 'N/A'}</span>
+                </div>
+                <div className={styles.tokenRow}>
+                  <span className={styles.tokenLabel}>auth_time:</span>
+                  <span className={styles.tokenValue}>
+                    {session.token.auth_time ? new Date(session.token.auth_time * 1000).toLocaleString() : 'N/A'}
+                  </span>
+                </div>
+              </div>
+            </div>
+            
+            <div className={styles.tokenSection}>
+              <h3 className={styles.tokenTitle}>Authorization</h3>
+              <div className={styles.tokenData}>
+                <div className={styles.tokenRow}>
+                  <span className={styles.tokenLabel}>scope:</span>
+                  <span className={styles.tokenValue}>{session.token.scope || 'N/A'}</span>
                 </div>
               </div>
             </div>

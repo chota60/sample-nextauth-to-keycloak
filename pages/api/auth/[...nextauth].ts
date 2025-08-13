@@ -1,5 +1,3 @@
-// import NextAuth from "next-auth"
-// import KeycloakProvider from "next-auth/providers/keycloak";
 import NextAuth, { type AuthOptions } from "next-auth"
 import KeycloakProvider, { type KeycloakProfile } from "next-auth/providers/keycloak"
 import { type JWT } from "next-auth/jwt";
@@ -11,6 +9,9 @@ declare module 'next-auth/jwt' {
     id_token?: string;
     provider?: string;
     issuer?: string;
+    auth_time?: number;
+    scope?: string;
+    aud?: string;
   }
 }
 
@@ -25,12 +26,28 @@ declare module 'next-auth' {
 // JWTトークンをデコードする関数
 function decodeJWT(token: string) {
   try {
-    const base64Url = token.split('.')[1];
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
+    
+    // ヘッダーをデコード
+    const header = JSON.parse(atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')));
+    
+    // ペイロードをデコード
+    const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-    return JSON.parse(jsonPayload);
+    const payload = JSON.parse(jsonPayload);
+    
+    // ヘッダーとペイロードの両方を返す
+    return {
+      header,
+      payload,
+      ...payload // ペイロードの内容も直接アクセス可能に
+    };
   } catch (error) {
     console.error('Failed to decode JWT:', error);
     return null;
@@ -51,12 +68,21 @@ export const authOptions = {
       if (account) {
         token.id_token = account.id_token
         token.provider = account.provider
-        // id_tokenからissuer情報を取得
+        
+        // id_tokenから情報を取得
         if (account.id_token) {
           const decodedToken = decodeJWT(account.id_token);
-          if (decodedToken && decodedToken.iss) {
+          if (decodedToken) {
             token.issuer = decodedToken.iss;
+            token.auth_time = decodedToken.payload.auth_time;
+            token.scope = decodedToken.payload.scope;
+            token.aud = decodedToken.payload.aud;
           }
+        }
+        
+        // scope情報をaccountから取得（id_tokenにない場合）
+        if (!token.scope && account.scope) {
+          token.scope = account.scope;
         }
       }
       return token
@@ -66,7 +92,6 @@ export const authOptions = {
         session.user.id = token.sub;
       }
       session.token = token
-      // issuer情報をセッションに追加
       session.issuer = token.issuer
       return session
     },
