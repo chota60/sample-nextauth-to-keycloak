@@ -1,5 +1,3 @@
-// import NextAuth from "next-auth"
-// import KeycloakProvider from "next-auth/providers/keycloak";
 import NextAuth, { type AuthOptions } from "next-auth"
 import KeycloakProvider, { type KeycloakProfile } from "next-auth/providers/keycloak"
 import { type JWT } from "next-auth/jwt";
@@ -70,28 +68,21 @@ export const authOptions = {
       if (account) {
         token.id_token = account.id_token
         token.provider = account.provider
-        // id_tokenからissuer情報を取得
+        
+        // id_tokenから情報を取得
         if (account.id_token) {
           const decodedToken = decodeJWT(account.id_token);
-          if (decodedToken && decodedToken.iss) {
-            token.issuer = decodedToken.iss;
-          }
-          // 認証時刻とスコープ情報を取得
           if (decodedToken) {
+            token.issuer = decodedToken.iss;
             token.auth_time = decodedToken.payload.auth_time;
             token.scope = decodedToken.payload.scope;
             token.aud = decodedToken.payload.aud;
           }
         }
-        // access_tokenからも情報を取得
-        if (account.access_token) {
-          const decodedAccessToken = decodeJWT(account.access_token);
-          if (decodedAccessToken) {
-            // access_tokenにscopeがない場合はaccountから取得
-            if (!token.scope && account.scope) {
-              token.scope = account.scope;
-            }
-          }
+        
+        // scope情報をaccountから取得（id_tokenにない場合）
+        if (!token.scope && account.scope) {
+          token.scope = account.scope;
         }
       }
       return token
@@ -101,7 +92,6 @@ export const authOptions = {
         session.user.id = token.sub;
       }
       session.token = token
-      // issuer情報をセッションに追加
       session.issuer = token.issuer
       return session
     },

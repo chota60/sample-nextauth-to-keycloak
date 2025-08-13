@@ -5,8 +5,6 @@ export default function Component() {
   const { data: session } = useSession();
   
   if (session) {
-    console.log(session.user)
-    console.log(session.token)
     return (
       <div className={styles.container}>
         <div className={styles.welcomeCard}>
