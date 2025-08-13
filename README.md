@@ -1,23 +1,26 @@
-# これは
-[NextAuth.js](https://next-auth.js.org/) を用いた Keycloak 接続のサンプルです。
+# NextAuth.js with Keycloak Integration Sample
 
-# 下準備
+This is a sample project demonstrating how to connect [NextAuth.js](https://next-auth.js.org/) with Keycloak.
+
+# Prerequisites
+
 ## npm install
 ```bash
 npm install 
 ```
 
-## Keycloak 側のセットアップ
-- client を任意の client_id で作成
-  - confidential client として作成すること（クライアント認証可能にする）
-- Root URL に実行環境の root を指定（e.g. http://localhost:3000）
-- Valid redirect URIs に /api/auth/callback/keycloak を指定
+## Keycloak Setup
+- Create a client with any desired client_id
+  - Create it as a confidential client (enable client authentication)
+- Set Root URL to your execution environment's root (e.g., http://localhost:3000)
+- Add `/api/auth/callback/keycloak` to Valid redirect URIs
 
-client_id と client_secret を控えておく
+Make sure to note down the client_id and client_secret
 
-# 使い方
-## credential の設定
-`.env.template` をもとに、 `.env.local` を作成してください
+# Usage
+
+## Credential Configuration
+Create `.env.local` based on `.env.template`
 
 ```
 KEYCLOAK_ID=
@@ -26,16 +29,16 @@ KEYCLOAK_ISSUER=
 ```
 
 - KEYCLOAK_ID 
-  - いわゆる `client_id` です。 連携に必要な情報として Keycloak の管理者から受け取ってください
+  - This is the `client_id`. Please obtain this information from your Keycloak administrator as it's required for integration
 - KEYCLOAK_SECRET 
-  - いわゆる `client_secret` です。 連携に必要な情報として Keycloak の管理者から受け取ってください
+  - This is the `client_secret`. Please obtain this information from your Keycloak administrator as it's required for integration
 - KEYCLOAK_ISSUER
-  - 接続先の Keycloak を指します
-  - template は `http{or https}://{domain}/realms/{realm name }` です
-    - 例えば localhots:8080 に立てた Keycloak における sample realm 向けであれば `http://localhost:8080/realms/sample` となります
+  - Points to the target Keycloak instance
+  - Template format: `http{or https}://{domain}/realms/{realm name}`
+    - For example, if targeting a sample realm on localhost:8080 Keycloak, it would be `http://localhost:8080/realms/sample`
 
+## Running the Application
 
-## run
 ### npm 
 
 ```bash
