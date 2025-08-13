@@ -11,6 +11,9 @@ declare module 'next-auth/jwt' {
     id_token?: string;
     provider?: string;
     issuer?: string;
+    auth_time?: number;
+    scope?: string;
+    aud?: string;
   }
 }
 
@@ -25,12 +28,28 @@ declare module 'next-auth' {
 // JWTトークンをデコードする関数
 function decodeJWT(token: string) {
   try {
-    const base64Url = token.split('.')[1];
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      return null;
+    }
+    
+    // ヘッダーをデコード
+    const header = JSON.parse(atob(parts[0].replace(/-/g, '+').replace(/_/g, '/')));
+    
+    // ペイロードをデコード
+    const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
-    return JSON.parse(jsonPayload);
+    const payload = JSON.parse(jsonPayload);
+    
+    // ヘッダーとペイロードの両方を返す
+    return {
+      header,
+      payload,
+      ...payload // ペイロードの内容も直接アクセス可能に
+    };
   } catch (error) {
     console.error('Failed to decode JWT:', error);
     return null;
@@ -56,6 +75,22 @@ export const authOptions = {
           const decodedToken = decodeJWT(account.id_token);
           if (decodedToken && decodedToken.iss) {
             token.issuer = decodedToken.iss;
+          }
+          // 認証時刻とスコープ情報を取得
+          if (decodedToken) {
+            token.auth_time = decodedToken.payload.auth_time;
+            token.scope = decodedToken.payload.scope;
+            token.aud = decodedToken.payload.aud;
+          }
+        }
+        // access_tokenからも情報を取得
+        if (account.access_token) {
+          const decodedAccessToken = decodeJWT(account.access_token);
+          if (decodedAccessToken) {
+            // access_tokenにscopeがない場合はaccountから取得
+            if (!token.scope && account.scope) {
+              token.scope = account.scope;
+            }
           }
         }
       }
