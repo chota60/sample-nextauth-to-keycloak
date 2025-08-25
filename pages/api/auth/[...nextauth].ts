@@ -12,6 +12,7 @@ declare module 'next-auth/jwt' {
     auth_time?: number;
     scope?: string;
     aud?: string;
+    acr?: string;
   }
 }
 
@@ -56,6 +57,7 @@ function decodeJWT(token: string) {
 
 // All requests to /api/auth/* (signIn, callback, signOut, etc.) will automatically be handled by NextAuth.js.
 export const authOptions = {
+  debug: process.env.NEXTAUTH_DEBUG === 'true', // 環境変数でデバッグモードを制御
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_ID || 'keycloak_client_id',
@@ -66,6 +68,9 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, account }) {
       if (account) {
+        if (process.env.NEXTAUTH_DEBUG === 'true') {
+          console.log('Account object:', account);
+        }
         token.id_token = account.id_token
         token.provider = account.provider
         
@@ -73,10 +78,15 @@ export const authOptions = {
         if (account.id_token) {
           const decodedToken = decodeJWT(account.id_token);
           if (decodedToken) {
+            if (process.env.NEXTAUTH_DEBUG === 'true') {
+              console.log('Decoded ID Token payload:', decodedToken.payload);
+              console.log('ACR value from token:', decodedToken.payload.acr);
+            }
             token.issuer = decodedToken.iss;
             token.auth_time = decodedToken.payload.auth_time;
             token.scope = decodedToken.payload.scope;
             token.aud = decodedToken.payload.aud;
+            token.acr = decodedToken.payload.acr;
           }
         }
         

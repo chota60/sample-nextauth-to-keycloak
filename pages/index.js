@@ -43,6 +43,10 @@ export default function Component() {
                   <span className={styles.tokenLabel}>email_verified:</span>
                   <span className={styles.tokenValue}>{session.user.emailVerified ? 'true' : 'false'}</span>
                 </div>
+                <div className={styles.tokenRow}>
+                  <span className={styles.tokenLabel}>acr:</span>
+                  <span className={styles.tokenValue}>{session.token.acr || 'N/A'}</span>
+                </div>
               </div>
             </div>
             
@@ -129,7 +133,7 @@ export default function Component() {
         
         <button 
           className={styles.signInButton}
-          onClick={() => signIn()}
+          onClick={() => signIn("keycloak",null,{acr_values: "2"})}
         >
           <span className={styles.buttonIcon}>🔐</span>
           Sign In
