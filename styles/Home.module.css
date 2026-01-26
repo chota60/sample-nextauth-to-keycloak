@@ -324,6 +324,81 @@
   opacity: 0.9;
 }
 
+/* Email Required Card Styles */
+.emailRequiredCard {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  padding: 3rem;
+  max-width: 600px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  animation: fadeInUp 0.8s ease-out;
+  text-align: center;
+}
+
+.emailRequiredContent {
+  margin: 2rem 0;
+}
+
+.emailRequiredTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 1rem 0;
+}
+
+.emailRequiredDescription {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.emailRequiredActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.registerEmailButton {
+  background: #495057;
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.registerEmailButton:hover {
+  background: #343a40;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.signOutButtonSecondary {
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signOutButtonSecondary:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #495057;
+}
+
 /* Animations */
 @keyframes fadeInUp {
   from {

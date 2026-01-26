@@ -1,8 +1,62 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { useSession, signIn, signOut } from "next-auth/react";
 import styles from "../styles/Home.module.css";
 
 export default function Component() {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  // AIA 完了後のリダイレクト時にサイレント再認証を行う
+  useEffect(() => {
+    if (router.query.refresh === "true") {
+      // 既に処理中かチェック（無限ループ防止）
+      const isRefreshing = sessionStorage.getItem("aia-refreshing");
+      if (isRefreshing) {
+        sessionStorage.removeItem("aia-refreshing");
+        router.replace("/", undefined, { shallow: true });
+        return;
+      }
+      // フラグをセットしてサイレント再認証（prompt=none で UI なし）
+      sessionStorage.setItem("aia-refreshing", "true");
+      router.replace("/", undefined, { shallow: true });
+      signIn("keycloak", { callbackUrl: "/" }, { prompt: "none" });
+    }
+  }, [router.query.refresh]);
+
+  // ログイン済みだがメール未登録または未検証の場合
+  if (session && (!session.user.email || !session.user.emailVerified)) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.emailRequiredCard}>
+          <p className={styles.eyebrow}>メールアドレスの設定が必要です</p>
+          <div className={styles.emailRequiredContent}>
+            <h1 className={styles.emailRequiredTitle}>
+              メールアドレスを設定してください
+            </h1>
+            <p className={styles.emailRequiredDescription}>
+              このアプリケーションをご利用いただくには、検証済みメールアドレスの登録が必要です。
+              下のボタンをクリックして、メールアドレスを設定してください。
+            </p>
+          </div>
+          <div className={styles.emailRequiredActions}>
+            <button
+              className={styles.registerEmailButton}
+              onClick={() => signIn("keycloak", { callbackUrl: "/" }, { kc_action: "UPDATE_EMAIL" })}
+            >
+              メールアドレスを設定
+            </button>
+            <button
+              className={styles.signOutButtonSecondary}
+              onClick={() => signOut()}
+            >
+              サインアウト
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (session) {
     const expiresInSeconds = session.expires
