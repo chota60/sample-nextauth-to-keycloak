@@ -1,0 +1,380 @@
+.container {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  padding: 3rem;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.eyebrow {
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #868e96;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.description {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.sectionTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 0.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.sectionDescription {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0 0 1rem 0;
+}
+
+/* Button Styles */
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: #495057;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.primaryButton:hover:not(:disabled) {
+  background: #343a40;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.primaryButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: #495057;
+  border: 2px solid #495057;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: #495057;
+  color: white;
+}
+
+.clearButton {
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearButton:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.clearButtonWrapper {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Result Box Styles */
+.resultBox {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+}
+
+.resultRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.resultRow:last-of-type {
+  border-bottom: none;
+}
+
+.resultLabel {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #495057;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.resultValue {
+  font-size: 0.9rem;
+  color: #212529;
+  word-break: break-all;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.codeValue {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #e9ecef;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.noValue {
+  color: #adb5bd;
+  font-style: italic;
+}
+
+.verification {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.successBg {
+  background: #d4edda;
+  color: #155724;
+}
+
+.warningBg {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.errorBg {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.emptyResult {
+  color: #6c757d;
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+.loadingText {
+  color: #495057;
+  font-style: italic;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Error Box */
+.errorBox {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+/* Tokens Result */
+.tokensResult {
+  margin-top: 1rem;
+}
+
+.tokenBlock {
+  margin-bottom: 1rem;
+}
+
+.tokenTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 0.5rem 0;
+}
+
+.tokenPre {
+  background: #212529;
+  color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Scenario Table */
+.scenarioTable {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  overflow: hidden;
+}
+
+.scenarioHeader {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #e9ecef;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.scenarioRow {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f3f4;
+  font-size: 0.9rem;
+}
+
+.scenarioRow:last-child {
+  border-bottom: none;
+}
+
+/* Back Link */
+.backLink {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.backLink a {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.backLink a:hover {
+  color: #495057;
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .buttonGroup {
+    flex-direction: column;
+  }
+
+  .scenarioHeader,
+  .scenarioRow {
+    grid-template-columns: 30px 1fr;
+  }
+
+  .scenarioHeader span:last-child,
+  .scenarioRow span:last-child {
+    display: none;
+  }
+
+  .resultRow {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .resultLabel {
+    min-width: auto;
+  }
+}
