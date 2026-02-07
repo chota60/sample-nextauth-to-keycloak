@@ -13,6 +13,8 @@ declare module 'next-auth/jwt' {
     scope?: string;
     aud?: string;
     acr?: string;
+    email?: string;
+    emailVerified?: boolean;
   }
 }
 
@@ -21,6 +23,9 @@ declare module 'next-auth' {
   interface Session {
     token: JWT;
     issuer?: string;
+  }
+  interface User {
+    emailVerified?: boolean;
   }
 }
 
@@ -87,6 +92,8 @@ export const authOptions = {
             token.scope = decodedToken.payload.scope;
             token.aud = decodedToken.payload.aud;
             token.acr = decodedToken.payload.acr;
+            token.email = decodedToken.payload.email;
+            token.emailVerified = decodedToken.payload.email_verified;
           }
         }
         
@@ -100,6 +107,8 @@ export const authOptions = {
     async session({session, token}) {
       if (session?.user) {
         session.user.id = token.sub;
+        session.user.email = token.email;
+        session.user.emailVerified = token.emailVerified;
       }
       session.token = token
       session.issuer = token.issuer
